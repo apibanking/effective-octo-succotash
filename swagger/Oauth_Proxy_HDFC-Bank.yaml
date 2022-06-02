@@ -1,0 +1,147 @@
+openapi: 3.0.1
+info:
+  version: 2.0.0
+  title: Oauth_Proxy_HDFC-Bank Sandbox 
+  description: <b>Oauth_Proxy_HDFC-Bank Sandbox </b></br></br>
+    {</br></br>
+    <b>"OAuthTokenValue":- "",</br></br>
+       "API Key (Client ID)":- "",</br></br>
+       "Shared Secret (Client Secret)":- "",</br></br>
+       "grant_type":- "",</br></br>
+       "app_scope":- "",</br></br>
+    }</br>  </br>
+    <b>The individual fields are briefly described below. </b></br>
+    <li><b>OAuthTokenValue</b> :- This value can be obtained by invoking HDFC token generator service.</li></br>
+    <li><b> API Key (Client ID)</b> :- This field contains your client ID obtained from the HDFC Bank API portal.</li></br>
+    <li><b>Shared Secret (Client Secret)</b> :- This field contains your client ID obtained from the HDFC Bank API portal.</li></br>
+    <li><b>grant_type</b> :- Please set the ‘grant_type’ as “client_credentials”.</li></br>
+    <li><b>app_scope</b> :- Please set the ‘app_scope’ as the scope value which was set on the HDFC Bank API portal while registering the consumer application.
+    </li>
+  
+servers: 
+   - url: https://api-tryitout-uat.hdfcbank.com
+  
+tags:
+  - name: Oauth_Proxy_HDFC-Bank Sandbox
+
+paths:
+ 
+  '/Sandbox/auth/v2/token':
+    # This is an HTTP operation
+    post:
+      description: Generating the Token
+      security:
+       - basicAuth: [] 
+      tags:
+        - Oauth_Proxy_HDFC-Bank Sandbox
+      requestBody:
+        content:
+          application/x-www-form-urlencoded: {}
+      parameters:
+        - in: query
+          name: grant_type
+          required: true
+          schema:
+            type: string
+            default: "client_credentials"
+           
+        # - in: query
+        #   name: scope
+        #   required: true
+        #   schema:
+        #     type: string
+        #     default: "Snehal_Test"
+            
+        - in: header
+          name: apikey
+          required: true
+          schema:
+            type: string
+            example: aHNDiZ5fj52HXscBQMBEJwdG3BBNjBNNaeCyKt5ff4DL6RmO    
+           
+      responses:
+       '200':
+          description: Token Generated
+          content:
+            application/json:
+             schema:
+              $ref: '#/components/schemas/TokenResponse'
+            
+      
+       '401':
+          description: 401 Unauthorized 
+          content:
+           application/json:
+            schema:
+             $ref: '#/components/schemas/ErrorResponse' 
+       
+     
+       '400':
+           description: 400 Bad Request
+           content:
+            application/json:
+             schema:
+              $ref: '#/components/schemas/ErrorResponse'
+        
+       '404':
+           description: 404 Not Found
+           content:
+            text/plain:
+             schema:
+              $ref: '#/components/schemas/EmptyErrorResponse'
+              
+       '405':
+           description: 405 Method Not Allowed 
+           content:
+             text/plain:
+              schema:
+               $ref: '#/components/schemas/EmptyErrorResponse'
+      
+       '429':
+           description: 429 Too Many Requests 
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/ErrorResponse'
+
+       '500':
+           description: 429 Too Many Requests 
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/ErrorResponse'
+
+    
+              
+components:
+  securitySchemes:
+    basicAuth:   
+      type: http
+      scheme: basic
+          
+  schemas:
+    TokenResponse:
+      type: object
+      properties:
+          token_type: 
+            type: string
+            example: "Bearer"
+          access_token:
+            type: string
+           
+          scope:
+            type: string
+            
+          expires_in:
+            type: integer
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        error_description:
+          type: string
+    EmptyErrorResponse:
+      type: string
+      example: ""
+      

@@ -1,0 +1,657 @@
+openapi: 3.0.1
+info:
+  version: 0.1.9
+  title: Credit Cards - Pre-execution CC Validation and OTP Generation Sandbox
+  description: This section will cover information about endpoint URL, request/response format, request/response format with sample data for each API.
+    </br>
+  
+    <b>{ </br></br>
+        
+    &nbsp;&nbsp;&nbsp;"RequestEncryptedValue" :&nbsp; " ",</br></br>
+    &nbsp;&nbsp;&nbsp;"SymmetricKeyEncryptedValue" :&nbsp; " ",</br></br>
+    &nbsp;&nbsp;&nbsp;"Scope" :&nbsp; " ",</br></br>
+    &nbsp;&nbsp;&nbsp;"TransactionId" :&nbsp; " ",</br></br>
+    &nbsp;&nbsp;&nbsp;"OAuthTokenValue" :&nbsp; " "</br></br>
+    }</b>
+    
+    
+    The individual fields of the Standard JSON Request Payload are briefly described below- 
+    <li><b>RequestEncryptedValue</b> :- This will contain the encrypted value of digitally signed original REST-JSON request sample.(Mandatory)</li></br>
+     <li><b>SymmetricKeyEncryptedValue</b> :- This will contain the encrypted value of a symmetric key used in field 1.(Mandatory)</li></br>
+     <li><b>Scope</b> :- This field should be the exact value which was set on the HDFC Bank’s API Portal during the partner onboarding process and indicates which external partner is invoking the API.(Mandatory)</li></br>
+     <li><b>TransactionId</b> :- External partners need to set a transaction ID to uniquely identify every request, in order to retrieve it from an audit trail at a later date.(Mandatory)</li></br>
+       <li><b>OAuthTokenValue</b> :- This value can be obtained by invoking HDFC Bank’s token generator service.(N/A) 
+       </li></br>
+       
+       <b>CC_preExecution_CardVal_OTPGen API Gateway Service URL's</b></br>
+    <b>UAT Endpoint</b> :- https://api-uat.hdfcbank.com/API/CC_preExecution_CardVal_OTPGen</br>
+    <b>PROD Endpoint</b> :- https://api.hdfcbank.com/API/CC_preExecution_CardVal_OTPGen</br> 
+
+
+servers: 
+   - url: https://api-tryitout-uat.hdfcbank.com
+
+
+tags:
+  - name: Credit Cards - Pre-execution CC Validation and OTP Generation Sandbox
+    description: <b>Medium Criticality</b>
+    
+security:
+    - oAuth2ClientCredentials: []
+    - ApiKeyAuth: [] 
+    
+paths:
+ 
+  '/API/Sandbox/CC_preExecution_CardVal_OTPGen':
+    post:
+      tags:
+        - Credit Cards - Pre-execution CC Validation and OTP Generation Sandbox
+      summary: Credit Cards - Pre-execution CC Validation and OTP Generation Sandbox
+      description: <a href='https://developer-uat.hdfcbank.com:8443/sites/default/files/2022-05/HDFCBank_UserManual_3_CC_Pre-Execution%20Credit%20Card%20Validation_OTP%20Gen_APIGEE_v1.1.docx' target='_blank'>User manual</a> 
+      requestBody:
+        description: Request
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/request'
+      parameters:
+        - in: header
+          name: apikey
+          required: true
+          schema:
+            type: string
+            example: aHNDiZ5fj52HXscBQMBEJwdG3BBNjBNNaeCyKt5ff4DL6RmO
+        
+      
+      responses:
+       '200':
+          description: API gateway response
+          content:
+           application/json:
+            schema:
+              $ref: '#/components/schemas/response'
+      
+       '401':
+          description: 401 Unauthorized 
+          content:
+           application/json:
+            schema:
+             $ref: '#/components/schemas/Error401'    
+     
+       '400':
+           description: 400 Bad Request
+           content:
+            application/json:
+             schema:
+              $ref: '#/components/schemas/Error400'
+       '405':
+           description: 405 Method Not Allowed 
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error405'
+       '413':
+           description: 413 Payload Too Large
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error413'
+       '429':
+           description: 429 Too Many Requests 
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error429'
+
+       '410':
+           description: 410 Gone
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error410'
+         
+       '421':
+           description: 421 Misdirected Request
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error421'
+          
+       '422':
+           description: 422 Unprocessable Entity (WebDAV)
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error422'
+        
+          
+       '411':
+           description: 411 Length Required
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error411'
+       '503':
+           description: 503 Service Unavailable
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error503'
+       '423':
+           description: 423 Locked (WebDAV)
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error423'
+           
+       '500':
+           description: 500 Internal Server Error 
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error500'
+       '409':
+            description: 409 Conflict
+            content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error409'
+               
+              
+       '509':
+            description:  509 Bandwidth Limit Exceeded
+            content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error509'
+               
+
+components:
+  schemas:
+    request:
+     type: object
+     properties:
+       sessionContext:
+         type: object
+         required:
+         - bankCode
+         - channel
+         - externalReferenceNo
+         - transactionBranch
+         - userId
+         properties:
+           channel:
+            type: integer
+            description: Channel code from which transaction is executed.Every system calling OBP-MW services will have unique channel code.
+            example: "PAYZP"
+           userId:
+            type: string
+            description: System or Channel User ID.Every system/channel will a specific pre-configured user.
+            example: "DevUser01"
+           externalReferenceNo:
+            type: string
+            description: Unique reference number for each transaction, to be sent by the caller.
+            example: "1010819907"
+           bankCode:
+            type: string
+            description: Bank code or financial institution identification of the user performing an interaction with the host. 
+            example: "08"
+           transactionBranch:
+            type: integer
+            description: Branch from which the user is doing the transaction. It may differ from the branch to which the user belongs
+            example: "089999"
+       CrossSaleLoanPreExecutionCardValAndOTPGenRequest:
+         type: object
+         properties:
+            requestString:
+             type: object
+             properties: 
+              mobileNo:
+               type: string
+               description: Mobile number of customer
+               example: "9876516156"
+              cardNo:
+               type: string
+               description: Last four card number
+               example: "6617"
+              encryptedToken:
+               type: string
+               description: This will be input value which user will fetch from response of eligibility check service
+               example: "[B@12a3a380TMDAwMTAxOTExMDAwMDI5NjYxMDAwMDAwMDAwMDAwMDAwMDA="
+               
+             
+                  
+    response:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "crossSaleLoanPreExecutionCardValAndOTPGenResponseDTO"
+        status: 
+          type: object
+          required:
+          - errorCode
+          - replyCode
+          - replyText
+          - internalReferenceNumber
+          - externalReferenceNo
+          properties:
+            errorCode:
+              type: integer
+              description: The error code in case of the transaction failure.
+              example: 0
+            extendedReply:
+              type: object
+              description: Extended reply may contain extra information about the state of the transaction irrespective of success or failure
+            externalReferenceNo:
+              type: string
+              description: Same as input of ExternalReferenceNo in Session Context.
+              example: "AD26032021111843"
+            internalReferenceNumber:
+              type: integer
+              description: OBP generated Reference Number
+              example: "2021123514115312"
+            isOverriden:
+              type: string
+              example: "false"
+            postingDate:
+              type: object
+              properties:
+                dateString:
+                  type: string
+                  example: "20210503000000"
+            replyCode:
+              type: integer
+              description: Reply code for the transaction. This indicates the final state of the transaction. It is further qualified by the extended reply of the transaction.
+              example: "0"
+            replyText:
+              type: integer
+              description: Indicates the error message corresponding to error code.
+              example: "0"
+        responseString:
+          type: string
+          example: "Success"
+            
+ 
+                  
+                   
+    Error401:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99401: Invalid API Key"
+                description: "TH99401: Invalid API Key"
+    Error400:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+        
+              TransactionId:
+                type: string
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99400: Decryption Failed"
+                description: "TH99400: Decryption Failed"
+                
+                
+                
+                
+    Error405:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99405:Request Method Not Allowed For API Access"
+                description: "TH99405:Request Method Not Allowed For API Access"
+    Error413:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              
+              Status:
+                type: string
+                example: "TH99413:Message Size Exceeded Limit"
+                description: "TH99413:Message Size Exceeded Limit"
+    Error429:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99429:DDOS Attack Detected from Requestor"
+                description: "TH99429:DDOS Attack Detected from Requestor"
+          
+ 
+    Error410:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99410:Cross Site Forgery Detected in API Request Message Payload"
+                description: "TH99410:Cross Site Forgery Detected in API Request Message Payload"
+    Error421:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99421:Document Structure Threat in API Request Message Payload"         
+                description: "TH99421:Document Structure Threat in API Request Message Payload"                                  
+    Error422:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99422:SQL Injection Detected in API Request Message Payload"
+                description: "TH99422:SQL Injection Detected in API Request Message Payload"
+    Error411:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99411:Invalid Content Type in API Request Message Payload"  
+                description: "TH99411:Invalid Content Type in API Request Message Payload"  
+        
+    Error503:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99503:API Back-end Service Not Available or Timed-Out"
+                description: "TH99503:API Back-end Service Not Available or Timed-Out"
+    Error423:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99423:XML Entity Expansion Attack Detected from Requester"
+                description: "TH99423:XML Entity Expansion Attack Detected from Requester"
+    Error500:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99500:Backend Service Provided Unexpected Response"
+                
+                description: "TH99500:Backend Service Provided Unexpected Response"
+    Error409:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99409:Message Payload Validation failed" 
+                description: "TH99409:Message Payload Validation failed" 
+    
+    Error509:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                description: "TH99509:Account Plan limit exceeded" 
+                example: "TH99509:Account Plan limit exceeded"
+                
+  securitySchemes:
+     ApiKeyAuth:        
+      type: apiKey
+      in: header       
+      name: apikey 

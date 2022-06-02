@@ -1,0 +1,1664 @@
+openapi: 3.0.1
+info:
+  version: 0.1.9
+  title: Credit Cards - OTP Validation and Credit Card Eligibility Check Sandbox
+  description: This service will be used to validate OTP and Eligibility. This  is  the  second  API in  the  journey,  post  this  the  third  step  is  to  call  Pre-Execution Credit Card validation_OTP GenAPI.
+    </br>
+  
+    <b>{ </br></br>
+        
+    &nbsp;&nbsp;&nbsp;"RequestEncryptedValue" :&nbsp; " ",</br></br>
+    &nbsp;&nbsp;&nbsp;"SymmetricKeyEncryptedValue" :&nbsp; " ",</br></br>
+    &nbsp;&nbsp;&nbsp;"Scope" :&nbsp; " ",</br></br>
+    &nbsp;&nbsp;&nbsp;"TransactionId" :&nbsp; " ",</br></br>
+    &nbsp;&nbsp;&nbsp;"OAuthTokenValue" :&nbsp; " "</br></br>
+    }</b>
+    
+    
+    The individual fields of the Standard JSON Request Payload are briefly described below- 
+    <li><b>RequestEncryptedValue</b> :- This will contain the encrypted value of digitally signed original REST-JSON request sample.(Mandatory)</li></br>
+     <li><b>SymmetricKeyEncryptedValue</b> :- This will contain the encrypted value of a symmetric key used in field 1.(Mandatory)</li></br>
+     <li><b>Scope</b> :- This field should be the exact value which was set on the HDFC Bank’s API Portal during the partner onboarding process and indicates which external partner is invoking the API.(Mandatory)</li></br>
+     <li><b>TransactionId</b> :- External partners need to set a transaction ID to uniquely identify every request, in order to retrieve it from an audit trail at a later date.(Mandatory)</li></br>
+       <li><b>OAuthTokenValue</b> :- This value can be obtained by invoking HDFC Bank’s token generator service.(N/A) 
+       </li></br>
+       
+       <b>CC_OTPVal_CheckEligibility API Gateway Service URL's</b></br>
+    <b>UAT Endpoint</b> :- https://api-uat.hdfcbank.com/API/CC_OTPVal_CheckEligibility</br>
+    <b>PROD Endpoint</b> :- https://api.hdfcbank.com/API/CC_OTPVal_CheckEligibility</br> 
+
+
+servers: 
+   - url: https://api-tryitout-uat.hdfcbank.com
+
+
+tags:
+  - name: Credit Cards - OTP Validation and Credit Card Eligibility Check Sandbox
+    description: <b>Medium Criticality</b>
+    
+security:
+    - oAuth2ClientCredentials: []
+    - ApiKeyAuth: [] 
+    
+paths:
+ 
+  '/API/Sandbox/CC_OTPVal_CheckEligibility':
+    post:
+      tags:
+        - Credit Cards - OTP Validation and Credit Card Eligibility Check Sandbox
+      summary: Credit Cards - OTP Validation and Credit Card Eligibility Check Sandbox
+      description: <a href='https://developer-uat.hdfcbank.com:8443/sites/default/files/2022-05/HDFCBank_User_Manual_2_CC_OTP_Validation%20and%20Eligibility%20check_APIGEE_API_v1.2.docx' target='_blank'>User manual</a> 
+      requestBody:
+        description: Request
+        required: true
+        content:
+          application/json:
+            schema:
+               $ref: '#/components/schemas/request'
+      parameters:
+        - in: header
+          name: apikey
+          required: true
+          schema:
+            type: string
+            example: aHNDiZ5fj52HXscBQMBEJwdG3BBNjBNNaeCyKt5ff4DL6RmO
+        
+      
+      responses:
+       '200':
+          description: API gateway response
+          content:
+           application/json:
+            schema:
+              $ref: '#/components/schemas/response'
+      
+       '401':
+          description: 401 Unauthorized 
+          content:
+           application/json:
+            schema:
+             $ref: '#/components/schemas/Error401'    
+     
+       '400':
+           description: 400 Bad Request
+           content:
+            application/json:
+             schema:
+              $ref: '#/components/schemas/Error400'
+       '405':
+           description: 405 Method Not Allowed 
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error405'
+       '413':
+           description: 413 Payload Too Large
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error413'
+       '429':
+           description: 429 Too Many Requests 
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error429'
+
+       '410':
+           description: 410 Gone
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error410'
+         
+       '421':
+           description: 421 Misdirected Request
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error421'
+          
+       '422':
+           description: 422 Unprocessable Entity (WebDAV)
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error422'
+        
+          
+       '411':
+           description: 411 Length Required
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error411'
+       '503':
+           description: 503 Service Unavailable
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error503'
+       '423':
+           description: 423 Locked (WebDAV)
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error423'
+           
+       '500':
+           description: 500 Internal Server Error 
+           content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error500'
+       '409':
+            description: 409 Conflict
+            content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error409'
+               
+              
+       '509':
+            description:  509 Bandwidth Limit Exceeded
+            content:
+             application/json:
+              schema:
+               $ref: '#/components/schemas/Error509'
+components:
+  schemas:
+    request:
+     type: object
+     properties:
+       sessionContext:
+         type: object
+         properties:
+            channel:
+             type: string
+             description: Channel code from which transaction is executed.Every system calling OBP-MW services will have unique channel code.
+             example: "PAYZP"
+            userId:
+             type: string
+             description: System or Channel User ID.Every system/channel will a specific pre-configured user.
+             example: "DevUser01"
+            externalReferenceNo:
+             type: string
+             description: Unique reference number for each transaction,to be sent by the caller.
+             example: "1234546456526645424"
+            bankCode:
+             type: string
+             description: Bank code or financial institution identification of the user performing an interaction with the host. 
+             example: "08"
+            transactionBranch:
+             type: integer
+             description: Branch from which the user is doing the transaction. It may differ from the branch to which the user belongs
+             example: "089999"
+            transactingPartyCode:
+             type: integer
+             example: "50000045"
+       CrossSaleOTPValidationAndEligibilityCheckRequest:
+         type: object
+         properties:
+            requestString:
+             type: object
+             description: Request String
+             properties: 
+               mobileNo:
+                 type: string
+                 description: Mobile number of customer 
+                 example: "9876516156"
+               cardNo:
+                 type: string
+                 description: Last four card number
+                 example: "6617"
+               OTP:
+                 type: string
+                 description: OTP
+                 example: "1245"
+               proCode:
+                 type: string
+                 description: Product Code-Optional field-Incase Specific Product code eligibility to be checked either of the below value to be passed
+                 example: ""
+             
+                  
+    response:
+      type: object
+      properties:
+        status: 
+          type: object
+          required: 
+            - ErrorCode
+            - ReplyText
+            - ReplyCode
+            - internalReferenceNumber
+            - ExternalReferenceNo
+          properties:
+            isOverriden:
+              type: string
+              example: "false"
+            replyCode:
+              type: integer
+              description: Reply code for the transaction.This indicates the final state of the transaction. It is further qualified by the extended reply of the transaction.
+              example: 0
+            replyText:
+              type: integer
+              description: Indicates the error message corresponding to error code
+              example: "0"
+            memo:
+              type: integer
+              example: 
+            externalReferenceNo:
+              type: string
+              description: Same as input of ExternalReferenceNo in Session Context
+              example: "1234546456526645424"
+            internalReferenceNumber:
+              type: integer
+              description: OBP generated Reference Number
+              example: "2021027004662626"
+            postingDate:
+              type: object
+              properties:
+                infinite:
+                  type: boolean
+                  example: false
+                null:
+                  type: boolean
+                  example: false
+                time:
+                  type: integer
+                  example: 0
+                timestamp:
+                  type: integer
+                  example: 1611685800000
+                timeZone:
+                  type: string
+                  example: "Asia/Kolkata"
+                dayOfYear:
+                  type: integer
+                  example: 27
+                leapYear:
+                  type: boolean
+                  example: false
+                month:
+                  type: integer
+                  example: 1
+                year:
+                  type: integer
+                  example: 2021
+                dayOfMonth:
+                  type: integer
+                  example: 27
+                dayOfWeek:
+                  type: integer
+                  example: 3
+                millis:
+                  type: integer
+                  example: 1611685800000
+                yearMonth:
+                  type: integer
+                  example: 202101
+                secondOfMinute:
+                  type: integer
+                  example: 0
+                calendarDayOfWeek:
+                  type: string
+                  example: "WEDNESDAY"
+                lastDayOfMonth:
+                  type: integer
+                  example: 31
+                dateString:
+                  type: string
+                  example: "20210127000000"
+                minuteOfHour:
+                  type: integer
+                  example: 0
+                hourOfDay:
+                  type: integer
+                  example: 0
+                sqltimestamp:
+                  type: integer
+                  example: 1611685800000
+                monthDateTime:
+                  type: integer
+                  example: 127000000
+                weekOfYear:
+                  type: integer
+                  example: 4
+                yearMonthDate:
+                  type: integer
+                  example: 20210127
+                sqlDate:
+                  type: integer
+                  example: 1611685800000
+                monthDate:
+                  type: integer
+                  example: 127
+            errorCode:
+              type: string
+              description: The error code in case of the transaction failure.
+              example: "0"
+            extendedReply:
+              type: object
+              description: Extended reply may contain extra information about the state of the transaction irrespective of success or failure
+              properties: 
+                messages:
+                  type: string
+                  example: 
+            validationErrors:
+              type: string
+              example: 
+            userReferenceNumber:
+              type: string
+              example: 
+            minuteOfHour:
+              type: integer
+              example: 0
+        maintenanceType:
+          type: string
+          example: 
+        configVersionId:
+          type: string
+          example:
+        responseString:
+          type: object
+          properties:
+            relationNumber:
+              type: string
+              description: Relationship Number
+              example: "0000000000175460088"
+            primaryCardHolderName:
+              type: string
+              description: Customer Name
+              example: "TEST CARD V10000005"
+            records:
+              type: array
+              items: 
+                type: object
+                properties:
+                  maxEligibleAmt:
+                    type: string
+                    description: Array Records-Max Eligibie Amount
+                  procWaiv2:
+                    type: string
+                    
+                  procWaiv4:
+                    type: string
+                  procWaiv3:
+                    type: string
+                  period4:
+                    type: string
+                    description: Fields to be considered for Tenure for Term loans -
+                  period3:
+                    type: string
+                    description: Fields to be considered for Tenure for Term loans -
+                  procWaiv5:
+                    type: string
+                  period2:
+                    type: string
+                    description: Fields to be considered for Tenure for Term loans -
+                  maximumProcessingFee5:
+                    type: string
+                  plan:
+                    type: string
+                    description: Plan-Ignore the values
+                  maximumProcessingFee4:
+                    type: string
+                  maximumProcessingFee3:
+                    type: string
+                  period5:
+                    type: string
+                    description: Fields to be considered for Tenure for Term loans -
+                  maximumProcessingFee2:
+                    type: string
+                  period:
+                    type: string
+                    description: Tenure for Insta/Jumbi/Smart emi/BTEReward point conversion ratio for Credit card upgrade
+                  minimumProcessingFee2:
+                    type: string
+                  thresholdAmount5:
+                    type: string
+                  maximumProcessingFeeRedef2:
+                    type: string
+                  minimumProcessingFee4:
+                    type: string
+                  thresholdAmount4:
+                    type: string
+                  thresholdAmount3:
+                    type: string
+                  minimumProcessingFee3:
+                    type: string
+                  processingFeeRedef:
+                    type: string
+                  maximumProcessingFeeRedef4:
+                    type: string
+                  maximumProcessingFeeRedef3:
+                    type: string
+                  percentageRedef:
+                    type: string
+                  maximumProcessingFeeRedef5:
+                    type: string
+                  thresholdAmount2:
+                    type: string
+                  interestX4:
+                    type: string
+                  minimumProcessingFeeRedef:
+                    type: string
+                  minimumProcessingFee5:
+                    type: string
+                  interestX5:
+                    type: string
+                  interestX2:
+                    type: string
+                  interestX3:
+                    type: string
+                  planDescription:
+                    type: string
+                  proCode:
+                    type: string
+                    description: Product Code
+                  thresholdAmountRedef2:
+                    type: string
+                  prodId:
+                    type: string
+                    description: Product id
+                  thresholdAmountRedef4:
+                    type: string
+                  thresholdAmountRedef3:
+                    type: string
+                  thresholdAmountRedef5:
+                    type: string
+                  memoLine1:
+                    type: string
+                    description: Processing Fee for Term Loans
+                  percentage2:
+                    type: string
+                  percentage3:
+                    type: string
+                  feeWaiverFlg:
+                    type: string
+                  percentage4:
+                    type: string
+                  percentage5:
+                    type: string
+                  memoLine4:
+                    type: string
+                  memoLine3:
+                    type: string
+                  memoLine2:
+                    type: string
+                  plan5:
+                    type: string
+                  plan2:
+                    type: string
+                  plan3:
+                    type: string
+                  plan4:
+                    type: string
+                  interestR2:
+                    type: string
+                  interestR3:
+                    type: string
+                  planDescription5:
+                    type: string
+                    description: Logo Description for Card Upgrade
+                  planDescription3:
+                    type: string
+                    description: Logo Description for Card Upgrade
+                  interestR4:
+                    type: string
+                  planDescription4:
+                    type: string
+                    description: Logo Description for Card Upgrade
+                  interestR5:
+                    type: string
+                  planDescription2:
+                    type: string
+                    description: Logo Description for Card Upgrade
+                  processingFee5:
+                    type: string
+                  processingFee4:
+                    type: string
+                  processingFee3:
+                    type: string
+                  processingFeeRedef3:
+                    type: string
+                  thresholdAmountRedef:
+                    type: string
+                  processingFeeRedef4:
+                    type: string
+                  processingFeeRedef5:
+                    type: string
+                  tid:
+                    type: string
+                    description: TID
+                  processingFee:
+                    type: string
+                  processingFeeRedef2:
+                    type: string
+                  interestO:
+                    type: string
+                  minimumProcessingFee:
+                    type: string
+                  percentage:
+                    type: string
+                  logo:
+                    type: string
+                    description: EligibleLogos for Credit card Upgrade only
+                  interestX:
+                    type: string
+                  prodDesc:
+                    type: string
+                    description: Product Description
+                  interestR:
+                    type: string
+                  eligibleAmtPercent:
+                    type: string
+                  tid5:
+                    type: string
+                    description: TID for Tem loans
+                  tid3:
+                    type: string
+                    description: TID for Tem loans
+                  tid4:
+                    type: string
+                    description: TID for Tem loans
+                  tid2:
+                    type: string
+                    description: TID for Tem loans
+                  processingFee2:
+                    type: string
+                  interest3:
+                    type: string
+                    description: Fields to be considered for Interest rate for Term loans -
+                  interest2:
+                    type: string
+                    description: Fields to be considered for Interest rate for Term loans -
+                  interest5:
+                    type: string
+                    description: Fields to be considered for Interest rate for Term loans -
+                  interest4:
+                    type: string
+                    description: Fields to be considered for Interest rate for Term loans -
+                  encryptedToken:
+                    type: string
+                    description: Encrypted Token
+                  percentageRedef3:
+                    type: string
+                  maximumProcessingFee:
+                    type: string
+                  percentageRedef2:
+                    type: string
+                  logo2:
+                    type: string
+                    description: Logo to be considered for Card upgrade
+                  interestO5:
+                    type: string
+                  maximumProcessingFeeRedef:
+                    type: string
+                  minimumProcessingFeeRedef5:
+                    type: string
+                  percentageRedef5:
+                    type: string
+                  percentageRedef4:
+                    type: string
+                  minimumProcessingFeeRedef2:
+                    type: string
+                  minimumProcessingFeeRedef3:
+                    type: string
+                  minimumProcessingFeeRedef4:
+                    type: string
+                  logo4:
+                    type: string
+                    description: Logo to be considered for Card upgrade
+                  procWaivredef5:
+                    type: string
+                  logo3:
+                    type: string
+                    description: Logo to be considered for Card upgrade
+                  logo5:
+                    type: string
+                    description: Logo to be considered for Card upgrade
+                  procWaivredef2:
+                    type: string
+                  procWaivredef4:
+                    type: string
+                  procWaivredef3:
+                    type: string
+                  interest:
+                    type: string
+                    description: Fields to be considered for Interest rate for Term loans -
+                  eligible:
+                    type: string
+                  eligibleAmt:
+                    type: string
+                  interestO3:
+                    type: string
+                  interestO4:
+                    type: string
+                  interestO2:
+                    type: string
+                  thresholdAmount:
+                    type: string
+                  savingAcctNumber:
+                    type: string
+                  processingFeeFlag:
+                    type: string
+                  processingFeeFlag4:
+                    type: string
+                  processingFeeFlag3:
+                    type: string
+                  processingFeeFlag5:
+                    type: string
+                  procWaiv:
+                    type: string
+                    description: Ignore thevalues
+                  processingFeeFlag2:
+                    type: string
+              example:
+                -  maxEligibleAmt: "00000000008000000"
+                   procWaiv2: "00"
+                   procWaiv4: "00"
+                   procWaiv3: "00"
+                   period4: "048"
+                   period3: "036"
+                   procWaiv5: "0"
+                   period2: "036"
+                   maximumProcessingFee5: "00"
+                   plan: "00000"
+                   maximumProcessingFee4: "00"
+                   maximumProcessingFee3: "00"
+                   period5: "060"
+                   maximumProcessingFee2: "00"
+                   period: "006"
+                   minimumProcessingFee2: "00"
+                   thresholdAmount5: "000000000000"
+                   maximumProcessingFeeRedef2: "00"
+                   minimumProcessingFee4: "00"
+                   thresholdAmount4: "000000000000"
+                   thresholdAmount3: "000000000000"
+                   minimumProcessingFee3: "00"
+                   processingFeeRedef: "00"
+                   maximumProcessingFeeRedef4: "00"
+                   maximumProcessingFeeRedef3: "00"
+                   percentageRedef: "01"
+                   maximumProcessingFeeRedef5: "00"
+                   thresholdAmount2: "000000000000"
+                   interestX4: "01140"
+                   minimumProcessingFeeRedef: "00"
+                   minimumProcessingFee5: "00"
+                   interestX5: "01140"
+                   interestX2: "02700"
+                   interestX3: "01140"
+                   planDescription: "VISA GOLD - STAFF"
+                   proCode: "001"
+                   thresholdAmountRedef2: "000000000000"
+                   prodId: "00001"
+                   thresholdAmountRedef4: "000000000000"
+                   thresholdAmountRedef3: "000000000000"
+                   thresholdAmountRedef5: "000000000000"
+                   memoLine1: "PROC FEE RS 700+GST"
+                   percentage2: "01"
+                   percentage3: "01"
+                   feeWaiverFlg: "0"
+                   percentage4: "01"
+                   percentage5: "01"
+                   memoLine4: "MEMOLINE04"
+                   memoLine3: "MEMOLINE03"
+                   memoLine2: "MEMOLINE02"
+                   plan5: "00000"
+                   plan2: "00000"
+                   plan3: "00000"
+                   plan4: "00000"
+                   interestR2: "2700"
+                   interestR3: "1140"
+                   planDescription5: "VISA_GLOD - PERSONAL"
+                   planDescription3: "MC BUSINESS GOLD DECLARATION"
+                   interestR4: "1140"
+                   planDescription4: "DINERS TEST PLASTICS FOR ME"
+                   interestR5: "1140"
+                   planDescription2: "VISA GOLD - RESOURCING"
+                   processingFee5: "00"
+                   processingFee4: "00"
+                   processingFee3: "00"
+                   processingFeeRedef3: "00"
+                   thresholdAmountRedef: "000000000000"
+                   processingFeeRedef4: "00"
+                   processingFeeRedef5: "00"
+                   tid: "000000543"
+                   processingFee: "00"
+                   processingFeeRedef2: "00"
+                   interestO: "0"
+                   minimumProcessingFee: "00"
+                   percentage: "01"
+                   logo: "240"
+                   interestX: "01800"
+                   prodDesc: "LIMIT ENHANCEMENT"
+                   interestR: "1800"
+                   eligibleAmtPercent: "A"
+                   tid5: "000000543"
+                   tid3: "000000543"
+                   tid4: "000000543"
+                   tid2: "000000540"
+                   processingFee2: "00"
+                   interest3: "01140"
+                   interest2: "02700"
+                   interest5: "01140"
+                   interest4: "01140"
+                   encryptedToken": "[B@12a3a380TMDAwMTAxMTUwMDAwMTA0NzUwOTAwMDAwMDAwMDAwMDAwMDA="
+                   percentageRedef3: "01"
+                   maximumProcessingFee: "00"
+                   percentageRedef2: "01"
+                   logo2: "285"
+                   interestO5: "0"
+                   maximumProcessingFeeRedef: "00"
+                   minimumProcessingFeeRedef5: "00"
+                   percentageRedef5: "01"
+                   percentageRedef4: "01"
+                   minimumProcessingFeeRedef2: "00"
+                   minimumProcessingFeeRedef3: "00"
+                   minimumProcessingFeeRedef4: "00"
+                   logo4: "913"
+                   procWaivredef5: "0"
+                   logo3: "408"
+                   logo5: "200"
+                   procWaivredef2: "00"
+                   procWaivredef4: "00"
+                   procWaivredef3: "00"
+                   interest: "01800"
+                   eligible: "Y"
+                   eligibleAmt: "00000000008000000"
+                   interestO3: "0"
+                   interestO4: "0"
+                   interestO2: "0"
+                   thresholdAmount: "000000000000"
+                   savingAcctNumber: "0000000000000000"
+                   processingFeeFlag: "P"
+                   processingFeeFlag4: "P"
+                   processingFeeFlag3: "P"
+                   processingFeeFlag5: "P"
+                   procWaiv: "00"
+                   processingFeeFlag2: "P"
+                -  maxEligibleAmt: "00000000005000000"
+                   procWaiv2: "00"
+                   procWaiv4": ""
+                   procWaiv3": ""
+                   period4: "000"
+                   period3: "000"
+                   procWaiv5": ""
+                   period2: "812"
+                   maximumProcessingFee5: "000000000000"
+                   plan: "00000"
+                   maximumProcessingFee4: "000000000000"
+                   maximumProcessingFee3: "000000000000"
+                   period5: "000"
+                   maximumProcessingFee2: "00"
+                   period: "812"
+                   minimumProcessingFee2: "00"
+                   thresholdAmount5": ""
+                   maximumProcessingFeeRedef2: "00"
+                   minimumProcessingFee4: "000000000000"
+                   thresholdAmount4": ""
+                   thresholdAmount3": ""
+                   minimumProcessingFee3: "000000000000"
+                   processingFeeRedef: "00"
+                   maximumProcessingFeeRedef4: "000000000000"
+                   maximumProcessingFeeRedef3: "000000000000"
+                   percentageRedef: "01"
+                   maximumProcessingFeeRedef5: "000000000000"
+                   thresholdAmount2: "000000000000"
+                   interestX4: "00000"
+                   minimumProcessingFeeRedef: "00"
+                   minimumProcessingFee5: "000000000000"
+                   interestX5: "00000"
+                   interestX2: "81800"
+                   interestX3: "00000"
+                   planDescription: "MC TIMES PLATINUM CARD INTL"
+                   thresholdAmountRedef2: "000000000000"
+                   prodId: "00002"
+                   thresholdAmountRedef4": ""
+                   thresholdAmountRedef3": ""
+                   thresholdAmountRedef5": ""
+                   memoLine1: "PROC FEE RS 700+GST"
+                   percentage2: "01"
+                   percentage3: "00000"
+                   feeWaiverFlg: "0"
+                   percentage4: "00000"
+                   percentage5: "00000"
+                   memoLine4: "MEMOLINE04"
+                   memoLine3: "MEMOLINE03"
+                   memoLine2: "MEMOLINE02"
+                   plan5: "00000"
+                   plan2: "00000"
+                   plan3: "00000"
+                   plan4: "00000"
+                   interestR2: "1800"
+                   interestR3: "0000"
+                   planDescription5": ""
+                   planDescription3": ""
+                   interestR4: "0000"
+                   planDescription4": ""
+                   interestR5: "0000"
+                   planDescription2: "MC EMV TIMES PLATINUM DOM"
+                   processingFee5: "000000000000"
+                   processingFee4: "000000000000"
+                   processingFee3: "000000000000"
+                   processingFeeRedef3: "000000000000"
+                   thresholdAmountRedef: "000000000000"
+                   processingFeeRedef4: "000000000000"
+                   processingFeeRedef5: "000000000000"
+                   tid: "000000091"
+                   processingFee: "00"
+                   processingFeeRedef2: "00"
+                   interestO: "0"
+                   minimumProcessingFee: "00"
+                   percentage: "01"
+                   logo: "507"
+                   interestX: "01800"
+                   prodDesc: "CREDIT CARD UPGRADE"
+                   interestR: "1800"
+                   eligibleAmtPercent: "A"
+                   tid5: "000000000"
+                   tid3: "000000000"
+                   tid4: "000000000"
+                   tid2: "000000091"
+                   processingFee2: "00"
+                   interest3: "00000"
+                   interest2: "81800"
+                   interest5: "00000"
+                   interest4: "00000"
+                   encryptedToken": "[B@12a3a380TMDAwMTAxMTUwMDAwMTA0NzUwOTAwMDAwMDAwMDAwMDAwMDA="
+                   percentageRedef3: "00000"
+                   maximumProcessingFee: "00"
+                   percentageRedef2: "01"
+                   logo2: "803"
+                   interestO5: "0"
+                   maximumProcessingFeeRedef: "00"
+                   minimumProcessingFeeRedef5: "000000000000"
+                   percentageRedef5: "00000"
+                   percentageRedef4: "00000"
+                   minimumProcessingFeeRedef2: "00"
+                   minimumProcessingFeeRedef3: "000000000000"
+                   minimumProcessingFeeRedef4: "000000000000"
+                   logo4: "000"
+                   procWaivredef5": ""
+                   logo3: "000"
+                   logo5: "000"
+                   procWaivredef2: "00"
+                   procWaivredef4": ""
+                   procWaivredef3": ""
+                   interest: "01800"
+                   eligible: "Y"
+                   eligibleAmt: "00000000005000000"
+                   interestO3: "0"
+                   interestO4: "0"
+                   interestO2: "8"
+                   thresholdAmount: "000000000000"
+                   savingAcctNumber: "0000000000000000"
+                   processingFeeFlag: "P"
+                   processingFeeFlag4": ""
+                   processingFeeFlag3": ""
+                   processingFeeFlag5": ""
+                   procWaiv: "00"
+                   processingFeeFlag2: "P"
+                -  maxEligibleAmt: "00000000005000000"
+                   procWaiv2: "00"
+                   procWaiv4: "00"
+                   procWaiv3: "00"
+                   period4: "036"
+                   period3: "024"
+                   procWaiv5: "0"
+                   period2: "018"
+                   maximumProcessingFee5: "00"
+                   plan: "00000"
+                   maximumProcessingFee4: "00"
+                   maximumProcessingFee3: "00"
+                   period5: "048"
+                   maximumProcessingFee2: "00"
+                   period: "012"
+                   minimumProcessingFee2: "00"
+                   thresholdAmount5: "000000000000"
+                   maximumProcessingFeeRedef2: "00"
+                   minimumProcessingFee4: "00"
+                   thresholdAmount4: "000000000000"
+                   thresholdAmount3: "000000000000"
+                   minimumProcessingFee3: "00"
+                   processingFeeRedef: "00"
+                   maximumProcessingFeeRedef4: "00"
+                   maximumProcessingFeeRedef3: "00"
+                   percentageRedef: "01"
+                   maximumProcessingFeeRedef5: "00"
+                   thresholdAmount2: "000000000000"
+                   interestX4: "02100"
+                   minimumProcessingFeeRedef: "00"
+                   minimumProcessingFee5: "00"
+                   interestX5: "02500"
+                   interestX2: "01800"
+                   interestX3: "01820"
+                   planDescription": ""
+                   thresholdAmountRedef2: "000000000000"
+                   prodId: "00007"
+                   thresholdAmountRedef4: "000000000000"
+                   thresholdAmountRedef3: "000000000000"
+                   thresholdAmountRedef5: "000000000000"
+                   memoLine1: "851"
+                   percentage2: "00"
+                   percentage3": "> 00"
+                   feeWaiverFlg: "0"
+                   percentage4: "10"
+                   percentage5": "> 00"
+                   memoLine4: "MEMOLINE04"
+                   memoLine3: "MEMOLINE03"
+                   memoLine2: "MEMOLINE02"
+                   plan5: "00000"
+                   plan2: "00000"
+                   plan3: "00000"
+                   plan4: "00000"
+                   interestR2: "1800"
+                   interestR3: "1820"
+                   planDescription5": ""
+                   planDescription3": ""
+                   interestR4: "2100"
+                   planDescription4": ""
+                   interestR5: "2500"
+                   planDescription2": ""
+                   processingFee5: "00"
+                   processingFee4: "00"
+                   processingFee3: "00"
+                   processingFeeRedef3: "00"
+                   thresholdAmountRedef: "000000000000"
+                   processingFeeRedef4: "00"
+                   processingFeeRedef5: "00"
+                   tid: "000000091"
+                   processingFee: "00"
+                   processingFeeRedef2: "00"
+                   interestO: "0"
+                   inimumProcessingFee: "00"
+                   percentage: "01"
+                   logo: "000"
+                   interestX: "01700"
+                   prodDesc: "INSTA LOAN"
+                   interestR: "1700"
+                   eligibleAmtPercent: "A"
+                   tid5: "000000093"
+                   tid3: "000000099"
+                   tid4: "000000092"
+                   tid2: "000000100"
+                   processingFee2: "00"
+                   interest3: "01820"
+                   interest2: "01800"
+                   interest5: "02500"
+                   interest4: "02100"
+                   encryptedToken": "[B@12a3a380TMDAwMTAxMTUwMDAwMTA0NzUwOTAwNTAxMDAxMDAwMTMyMzU="
+                   percentageRedef3": "> 00"
+                   maximumProcessingFee: "00"
+                   percentageRedef2: "00"
+                   logo2: "000"
+                   interestO5: "0"
+                   maximumProcessingFeeRedef: "00"
+                   minimumProcessingFeeRedef5: "00"
+                   percentageRedef5": "> 00"
+                   percentageRedef4: "10"
+                   minimumProcessingFeeRedef2: "00"
+                   minimumProcessingFeeRedef3: "00"
+                   minimumProcessingFeeRedef4: "00"
+                   logo4: "000"
+                   procWaivredef5: "0"
+                   logo3: "000"
+                   logo5: "000"
+                   procWaivredef2: "00"
+                   procWaivredef4: "00"
+                   procWaivredef3: "00"
+                   interest: "01700"
+                   eligible: "Y"
+                   eligibleAmt: "00000000005000000"
+                   interestO3: "0"
+                   interestO4: "0"
+                   interestO2: "0"
+                   thresholdAmount: "000000000000"
+                   savingAcctNumber: "0000000000013235"
+                   processingFeeFlag: "P"
+                   processingFeeFlag4: "P"
+                   processingFeeFlag3: "P"
+                   processingFeeFlag5: "P"
+                   procWaiv: "00"
+                   processingFeeFlag2: "P"
+                - maxEligibleAmt: "00000000000020000"
+                  procWaiv2: "00"
+                  procWaiv4: "00"
+                  procWaiv3: "00"
+                  period4: "048"
+                  period3: "006"
+                  procWaiv5: "0"
+                  period2: "036"
+                  maximumProcessingFee5: "00"
+                  plan: "00000"
+                  maximumProcessingFee4: "00"
+                  maximumProcessingFee3: "00"
+                  period5: "060"
+                  maximumProcessingFee2: "00"
+                  period: "012"
+                  minimumProcessingFee2: "00"
+                  thresholdAmount5: "000000000000"
+                  maximumProcessingFeeRedef2: "00"
+                  minimumProcessingFee4: "00"
+                  thresholdAmount4: "000000000000"
+                  thresholdAmount3: "000000000000"
+                  minimumProcessingFee3: "00"
+                  processingFeeRedef: "00"
+                  maximumProcessingFeeRedef4: "00"
+                  maximumProcessingFeeRedef3: "00"
+                  percentageRedef": "> 00"
+                  maximumProcessingFeeRedef5: "00"
+                  thresholdAmount2: "000000000000"
+                  interestX4: "01140"
+                  minimumProcessingFeeRedef: "00"
+                  minimumProcessingFee5: "00"
+                  interestX5: "01140"
+                  interestX2: "02400"
+                  interestX3: "01800"
+                  planDescription: "VISA GOLD - STAFF"
+                  thresholdAmountRedef2: "000000000000"
+                  prodId: "00009"
+                  thresholdAmountRedef4: "000000000000"
+                  thresholdAmountRedef3: "000000000000"
+                  thresholdAmountRedef5: "000000000000"
+                  memoLine1: "test112345"
+                  percentage2: "00"
+                  percentage3: "01"
+                  feeWaiverFlg: "0"
+                  percentage4: "01"
+                  percentage5: "01"
+                  memoLine4: "test412345"
+                  memoLine3: "test312345"
+                  memoLine2: "test212345"
+                  plan5: "00000"
+                  plan2: "00000"
+                  plan3: "00000"
+                  plan4: "00000"
+                  interestR2: "2400"
+                  interestR3: "1800"
+                  planDescription5: "VISA_GLOD - PERSONAL"
+                  planDescription3: "MC BUSINESS GOLD DECLARATION"
+                  interestR4: "1140"
+                  planDescription4: "DINERS TEST PLASTICS FOR ME"
+                  interestR5: "1140"
+                  planDescription2: "VISA GOLD - RESOURCING"
+                  processingFee5: "00"
+                  processingFee4: "00"
+                  processingFee3: "00"
+                  processingFeeRedef3: "00"
+                  thresholdAmountRedef: "000000000000"
+                  processingFeeRedef4: "00"
+                  processingFeeRedef5: "00"
+                  tid: "000000121"
+                  processingFee: "00"
+                  processingFeeRedef2: "00"
+                  interestO: "0"
+                  inimumProcessingFee: "00"
+                  percentage": "> 00"
+                  logo: "240"
+                  nterestX: "01400"
+                  prodDesc: "smart eemi"
+                  interestR: "1400"
+                  eligibleAmtPercent: "A"
+                  tid5: "000000543"
+                  tid3: "000000543"
+                  id4: "000000543"
+                  tid2: "000000120"
+                  processingFee2: "00"
+                  interest3: "01800"
+                  interest2: "02400"
+                  nterest5: "01140"
+                  interest4: "01140"
+                  encryptedToken": "[B@12a3a380TMDAwMTAxMTUwMDAwMTA0NzUwOTAwMDAwMDAwMDAwMDAwMDA="
+                  percentageRedef3: "01"
+                  maximumProcessingFee: "00"
+                  ercentageRedef2: "00"
+                  logo2: "285"
+                  interestO5: "0"
+                  maximumProcessingFeeRedef: "00"
+                  minimumProcessingFeeRedef5: "00"
+                  ercentageRedef5: "01"
+                  percentageRedef4: "01"
+                  minimumProcessingFeeRedef2: "00"
+                  minimumProcessingFeeRedef3: "00"
+                  minimumProcessingFeeRedef4: "00"
+                  logo4: "913"
+                  procWaivredef5: "0"
+                  logo3: "408"
+                  logo5: "200"
+                  procWaivredef2: "00"
+                  procWaivredef4: "00"
+                  procWaivredef3: "00"
+                  interest: "01400"
+                  eligible: "Y"
+                  eligibleAmt: "00000000000020000"
+                  interestO3: "0"
+                  interestO4: "0"
+                  interestO2: "0"
+                  thresholdAmount: "000000000000"
+                  savingAcctNumber: "0000000000000000"
+                  processingFeeFlag: "P"
+                  processingFeeFlag4: "P"
+                  processingFeeFlag3: "P"
+                  processingFeeFlag5: "P"
+                  procWaiv: "00"
+                  processingFeeFlag2: "P"
+                - maxEligibleAmt: "00000000005000000"
+                  procWaiv2: "00"
+                  rocWaiv4: "00"
+                  procWaiv3: "00"
+                  period4: "048"
+                  period3: "036"
+                  procWaiv5: "0"
+                  period2: "012"
+                  maximumProcessingFee5: "00"
+                  plan: "00000"
+                  maximumProcessingFee4: "00"
+                  maximumProcessingFee3: "00"
+                  period5: "060"
+                  maximumProcessingFee2: "00"
+                  period: "006"
+                  minimumProcessingFee2: "00"
+                  thresholdAmount5: "000000000000"
+                  maximumProcessingFeeRedef2: "00"
+                  minimumProcessingFee4: "00"
+                  thresholdAmount4: "000000000000"
+                  thresholdAmount3: "000000000000"
+                  minimumProcessingFee3: "00"
+                  processingFeeRedef: "00"
+                  maximumProcessingFeeRedef4: "00"
+                  maximumProcessingFeeRedef3: "00"
+                  percentageRedef: "01"
+                  maximumProcessingFeeRedef5: "00"
+                  thresholdAmount2: "000000000000"
+                  interestX4: "02500"
+                  minimumProcessingFeeRedef: "00"
+                  minimumProcessingFee5: "00"
+                  interestX5: "02300"
+                  interestX2: "02750"
+                  interestX3: "02700"
+                  planDescription": ""
+                  thresholdAmountRedef2: "000000000000"
+                  prodId: "00010"
+                  thresholdAmountRedef4: "000000000000"
+                  thresholdAmountRedef3: "000000000000"
+                  thresholdAmountRedef5: "000000000000"
+                  memoLine1: "850"
+                  percentage2: "00"
+                  percentage3: "01"
+                  feeWaiverFlg: "0"
+                  percentage4: "01"
+                  percentage5: "01"
+                  memoLine4: "MEMOLINE04"
+                  memoLine3: "MEMOLINE03"
+                  memoLine2: "MEMOLINE02"
+                  plan5: "00000"
+                  plan2: "00000"
+                  plan3: "00000"
+                  plan4: "00000"
+                  interestR2: "2750"
+                  interestR3: "2700"
+                  planDescription5": ""
+                  planDescription3": ""
+                  interestR4: "2500"
+                  planDescription4": ""
+                  interestR5: "2300"
+                  planDescription2": ""
+                  processingFee5: "00"
+                  processingFee4: "00"
+                  processingFee3: "00"
+                  processingFeeRedef3: "00"
+                  thresholdAmountRedef: "000000000000"
+                  processingFeeRedef4: "00"
+                  processingFeeRedef5: "00"
+                  tid: "000000543"
+                  processingFee: "00"
+                  processingFeeRedef2: "00"
+                  interestO: "0"
+                  minimumProcessingFee: "00"
+                  percentage: "01"
+                  logo: "000"
+                  interestX: "02800"
+                  prodDesc: "INSTAJUMBO LOAN"
+                  interestR: "2800"
+                  eligibleAmtPercent: "A"
+                  tid5: "000000542"
+                  tid3: "000000540"
+                  tid4: "000000541"
+                  tid2: "000000544"
+                  processingFee2: "00"
+                  interest3: "02700"
+                  interest2: "02750"
+                  interest5: "02300"
+                  interest4: "02500"
+                  encryptedToken": "[B@12a3a380TMDAwMTAxMTUwMDAwMTA0NzUwOTAwNTAxMDAxMDAwMTMyMzU="
+                  percentageRedef3: "01"
+                  maximumProcessingFee: "00"
+                  percentageRedef2: "00"
+                  logo2: "000"
+                  interestO5: "0"
+                  maximumProcessingFeeRedef: "00"
+                  minimumProcessingFeeRedef5: "00"
+                  percentageRedef5: "01"
+                  percentageRedef4: "01"
+                  minimumProcessingFeeRedef2: "00"
+                  minimumProcessingFeeRedef3: "00"
+                  minimumProcessingFeeRedef4: "00"
+                  logo4: "000"
+                  procWaivredef5: "0"
+                  logo3: "000"
+                  logo5: "000"
+                  procWaivredef2: "00"
+                  procWaivredef4: "00"
+                  procWaivredef3: "00"
+                  interest: "02800"
+                  eligible: "Y"
+                  eligibleAmt: "00000000005000000"
+                  interestO3: "0"
+                  interestO4: "0"
+                  interestO2: "0"
+                  thresholdAmount: "000000000000"
+                  savingAcctNumber: "0000000000013235"
+                  processingFeeFlag: "P"
+                  processingFeeFlag4: "P"
+                  processingFeeFlag3: "P"
+                  processingFeeFlag5: "P"
+                  procWaiv: "00"
+                  processingFeeFlag2: "P"
+            custNumber:
+              type: string
+              description: Customer No
+              example: "0001011500001047509"
+            creditLimit:
+              type: string
+              description: Credit Limit
+              example: "005000000"
+            aanNumber:
+              type: string
+              description: AAN Number
+              example: "0001011500001047509"
+             
+            
+        
+            
+              
+    Error401:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99401: Invalid API Key"
+                description: "TH99401: Invalid API Key"
+    Error400:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+        
+              TransactionId:
+                type: string
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99400: Decryption Failed"
+                description: "TH99400: Decryption Failed"
+                
+                
+                
+                
+    Error405:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99405:Request Method Not Allowed For API Access"
+                description: "TH99405:Request Method Not Allowed For API Access"
+    Error413:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              
+              Status:
+                type: string
+                example: "TH99413:Message Size Exceeded Limit"
+                description: "TH99413:Message Size Exceeded Limit"
+    Error429:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99429:DDOS Attack Detected from Requestor"
+                description: "TH99429:DDOS Attack Detected from Requestor"
+          
+ 
+    Error410:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99410:Cross Site Forgery Detected in API Request Message Payload"
+                description: "TH99410:Cross Site Forgery Detected in API Request Message Payload"
+    Error421:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99421:Document Structure Threat in API Request Message Payload"         
+                description: "TH99421:Document Structure Threat in API Request Message Payload"                                  
+    Error422:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99422:SQL Injection Detected in API Request Message Payload"
+                description: "TH99422:SQL Injection Detected in API Request Message Payload"
+    Error411:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99411:Invalid Content Type in API Request Message Payload"  
+                description: "TH99411:Invalid Content Type in API Request Message Payload"  
+        
+    Error503:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99503:API Back-end Service Not Available or Timed-Out"
+                description: "TH99503:API Back-end Service Not Available or Timed-Out"
+    Error423:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99423:XML Entity Expansion Attack Detected from Requester"
+                description: "TH99423:XML Entity Expansion Attack Detected from Requester"
+    Error500:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99500:Backend Service Provided Unexpected Response"
+                
+                description: "TH99500:Backend Service Provided Unexpected Response"
+    Error409:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                example: "TH99409:Message Payload Validation failed" 
+                description: "TH99409:Message Payload Validation failed" 
+    
+    Error509:
+      type: object
+      required:
+        - ResponseEncryptedValue
+          GWSymmetricKeyEncryptedValue
+          Scope
+          TransactionId
+          Status
+      properties:
+        
+              ResponseEncryptedValue:
+                type: integer
+                example: ""
+              GWSymmetricKeyEncryptedValue:
+                type: integer
+                example:  ""
+              Scope:
+                type: string
+                example: ExampleOrg
+              TransactionId:
+                type: integer
+                example: 2019-05-04 T11:46:12.969+05:30
+              Status:
+                type: string
+                description: "TH99509:Account Plan limit exceeded" 
+                example: "TH99509:Account Plan limit exceeded"
+                
+  securitySchemes:
+     ApiKeyAuth:        
+      type: apiKey
+      in: header       
+      name: apikey 
